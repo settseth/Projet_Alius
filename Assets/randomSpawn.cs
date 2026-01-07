@@ -14,7 +14,7 @@ public class RandomSpawn : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SpawnRoutine());
+        //StartCoroutine(SpawnRoutine());
     }
 
     IEnumerator SpawnRoutine()
