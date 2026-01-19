@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Anchor
+  - Fire
+  - Dossier 1
+  - Dossier 2
   layers:
   - Default
   - TransparentFX
