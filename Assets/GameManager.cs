@@ -1,87 +1,73 @@
-using System;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Paramètres de Spawn")]
-    public GameObject[] folderPrefabs;    // Glisse tes différents types de dossiers ici
-    public Transform[] spawnPoints;      // Glisse tes différents points de spawn ici
-    public Transform folderParent;       // L'objet "Conteneur" pour ranger les dossiers
+    [Header("Phase 1 : Formes (Premier Jeu)")]
+    public GameObject game2Container;         // Conteneur des Formes
+    public ShapeMinigame shapeGameScript;     // Script des Formes
+    public float shapeGameDuration = 60f;     // Durée du jeu des formes
 
-    [Header("Paramètres de Jeu")]
-    public float gameDuration = 120f;
-    public float initialSpawnDelay = 3f;
-    public float minSpawnDelay = 0.5f;
-
-    private int sortedCount = 0;
-    private bool isGameActive = true;
+    [Header("Phase 2 : Dossiers (Deuxième Jeu)")]
+    public GameObject game1Container;         // Conteneur des Dossiers
+    public FolderMiniGame folderGameScript;   // Script des Dossiers
+    public float folderGameDuration = 60f;    // Durée du jeu des dossiers
 
     void Start()
     {
-        // Sécurité : on vérifie que les listes ne sont pas vides
-        if (folderPrefabs.Length == 0 || spawnPoints.Length == 0)
-        {
-            UnityEngine.Debug.LogError("Attention : folderPrefabs ou spawnPoints est vide !");
-            return;
-        }
+        // Initialisation : On active les FORMES, on cache les DOSSIERS
+        if (game2Container != null) game2Container.SetActive(true);
+        if (game1Container != null) game1Container.SetActive(false);
 
-        StartCoroutine(GameTimer());
-        StartCoroutine(SpawnFolders());
+        StartCoroutine(GameSequence());
     }
 
-    IEnumerator SpawnFolders()
+    IEnumerator GameSequence()
     {
-        float currentDelay = initialSpawnDelay;
+        // ==========================================
+        // --- PHASE 1 : FORMES ---
+        // ==========================================
+        UnityEngine.Debug.Log($">>> Chef d'orchestre : Lancement Phase 1 (Formes) pour {shapeGameDuration} secondes.");
 
-        while (isGameActive)
-        {
-            // 1. Choisir un dossier au hasard
-            GameObject randomPrefab = folderPrefabs[UnityEngine.Random.Range(0, folderPrefabs.Length)];
-            // 2. Choisir un point de spawn au hasard
-            Transform randomPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
-            // 3. Créer le dossier en tant qu'enfant de folderParent
-            // On utilise la position et la rotation du point de spawn
-            GameObject newFolder = Instantiate(randomPrefab, randomPoint.position, randomPoint.rotation, folderParent);
+        if (shapeGameScript != null) shapeGameScript.StartGame();
 
-            // On s'assure que l'échelle reste correcte (1,1,1) si le parent a une échelle bizarre
-            newFolder.transform.localScale = randomPrefab.transform.localScale;
+        // On attend la fin du timer des formes
+        yield return new WaitForSeconds(shapeGameDuration);
 
-            // 4. Difficulté progressive
-            currentDelay = Mathf.Max(minSpawnDelay, currentDelay * 0.95f);
+        // ==========================================
+        // --- TRANSITION ---
+        // ==========================================
+        UnityEngine.Debug.Log(">>> Chef d'orchestre : Fin Phase 1. Transition vers Dossiers...");
 
-            yield return new WaitForSeconds(currentDelay);
-        }
+        // On cache le jeu des formes
+        if (game2Container != null) game2Container.SetActive(false);
+
+        // ==========================================
+        // --- PHASE 2 : DOSSIERS ---
+        // ==========================================
+        UnityEngine.Debug.Log($">>> Chef d'orchestre : Lancement Phase 2 (Dossiers) pour {folderGameDuration} secondes.");
+
+        // On affiche le jeu des dossiers
+        if (game1Container != null) game1Container.SetActive(true);
+
+        // On lance la logique du jeu des dossiers
+        if (folderGameScript != null) folderGameScript.StartFolderGame();
+
+        // On attend la fin du timer des dossiers
+        yield return new WaitForSeconds(folderGameDuration);
+
+        // ==========================================
+        // --- FIN TOTALE ---
+        // ==========================================
+        UnityEngine.Debug.Log(">>> Chef d'orchestre : Fin de la Phase 2. Arrêt du jeu.");
+
+        // On arrête proprement le jeu des dossiers
+        if (folderGameScript != null) folderGameScript.StopFolderGame();
+
+        // Optionnel : Désactiver le conteneur ou afficher un écran de fin
+        // if (game1Container != null) game1Container.SetActive(false);
     }
 
-    public void AddPoint()
-    {
-        if (isGameActive)
-        {
-            sortedCount++;
-            UnityEngine.Debug.Log("Point marqué ! Total : " + sortedCount);
-        }
-    }
-
-    IEnumerator GameTimer()
-    {
-        yield return new WaitForSeconds(gameDuration);
-        EndGame();
-    }
-
-    void EndGame()
-    {
-        isGameActive = false;
-        UnityEngine.Debug.Log("--- TEMPS ÉCOULÉ ---");
-        UnityEngine.Debug.Log("Nombre total de dossiers triés : " + sortedCount);
-
-        // Optionnel : Détruire tous les dossiers restants à la fin
-        if (folderParent != null)
-        {
-            foreach (Transform child in folderParent)
-            {
-                Destroy(child.gameObject);
-            }
-        }
-    }
+    // Fonction vide pour compatibilité si d'autres scripts l'appellent
+    public void AddPoint() { }
 }
