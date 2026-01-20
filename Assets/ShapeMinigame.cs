@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class ShapeMinigame : MonoBehaviour
 {
@@ -10,12 +9,11 @@ public class ShapeMinigame : MonoBehaviour
     {
         public string shapeName;
         public GameObject prefab;
-        public Collider targetZone;     // Le Collider de la zone cible (Cocher "Is Trigger")
+        public Collider targetZone;
     }
 
     [Header("Configuration")]
     public Transform spawnPoint;
-    // On a enlevé maxTime ici car c'est le GameManager qui décide
     public int shapesToWin = 5;
     public List<ShapeConfig> availableShapes;
 
@@ -28,33 +26,26 @@ public class ShapeMinigame : MonoBehaviour
     {
         if (availableShapes.Count == 0)
         {
-            UnityEngine.Debug.LogError("Erreur : Aucune forme configurée dans ShapeMinigame !");
+            UnityEngine.Debug.LogError("Erreur : Aucune forme configurée !");
             return;
         }
 
         isGameActive = true;
         currentScore = 0;
-
-        UnityEngine.Debug.Log("--- DÉBUT JEU FORMES (Mode Trigger - Sans Timer Interne) ---");
-
+        UnityEngine.Debug.Log("--- DÉBUT JEU FORMES ---");
         SpawnNextShape();
-        // On ne lance plus de Coroutine de timer ici
     }
 
     void SpawnNextShape()
     {
         if (!isGameActive) return;
 
-        // 1. Choisir une forme au hasard
         currentShapeConfig = availableShapes[UnityEngine.Random.Range(0, availableShapes.Count)];
 
-        // 2. Nettoyer l'ancien objet s'il existe
         if (currentObjectInstance != null) Destroy(currentObjectInstance);
 
-        // 3. Faire apparaître l'objet
         currentObjectInstance = Instantiate(currentShapeConfig.prefab, spawnPoint.position, spawnPoint.rotation);
 
-        // 4. Ajouter le détecteur
         var detector = currentObjectInstance.AddComponent<ShapeHitDetector>();
         detector.Setup(this, currentShapeConfig.targetZone);
     }
@@ -65,7 +56,7 @@ public class ShapeMinigame : MonoBehaviour
 
         if (validatedObject == currentObjectInstance)
         {
-            UnityEngine.Debug.Log("Forme correcte (Zone Trigger atteinte) !");
+            UnityEngine.Debug.Log("Forme correcte !");
 
             Destroy(validatedObject, 0.2f);
             currentObjectInstance = null;
@@ -87,19 +78,27 @@ public class ShapeMinigame : MonoBehaviour
         }
     }
 
-    // Fonction appelée uniquement quand le joueur a fini toutes les formes
     void EndGame()
     {
         isGameActive = false;
 
-        UnityEngine.Debug.Log("--- FIN DU JEU DE FORMES (Toutes les formes triées) ---");
         UnityEngine.Debug.Log($"BRAVO ! Score final : {currentScore}/{shapesToWin}");
 
         if (currentObjectInstance != null) Destroy(currentObjectInstance);
+
+        GameManager gm = FindObjectOfType<GameManager>();
+        if (gm != null)
+        {
+            gm.EndShapePhase();
+        }
+        else
+        {
+            // CORRECTION ICI : On précise UnityEngine.Debug
+            UnityEngine.Debug.LogError("Impossible de trouver le GameManager !");
+        }
     }
 }
 
-// --- PETIT SCRIPT UTILITAIRE ---
 public class ShapeHitDetector : MonoBehaviour
 {
     private ShapeMinigame manager;

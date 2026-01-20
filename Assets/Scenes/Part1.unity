@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1331865575}
-  shapesToWin: 30
+  shapesToWin: 1
   availableShapes:
   - shapeName: Cube
     prefab: {fileID: 1911871686}
@@ -349,7 +349,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   game2Container: {fileID: 161753837}
   shapeGameScript: {fileID: 161753839}
-  shapeGameDuration: 60
   game1Container: {fileID: 1394864552}
   folderGameScript: {fileID: 1394864554}
   folderGameDuration: 60
@@ -1678,7 +1677,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4703678347420112949, guid: f1339167d55d12940801adb3476aaf2a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.8272
+      value: -0.847
       objectReference: {fileID: 0}
     - target: {fileID: 4703678347420112949, guid: f1339167d55d12940801adb3476aaf2a, type: 3}
       propertyPath: m_LocalPosition.z
