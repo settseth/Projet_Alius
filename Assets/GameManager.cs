@@ -3,11 +3,13 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] public Transition12 transition12script;
+
     [Header("Phase 1 : Formes (Premier Jeu)")]
     public GameObject game2Container;
     public ShapeMinigame shapeGameScript;
 
-    [Header("Phase 2 : Dossiers (Deuxième Jeu)")]
+    [Header("Phase 2 : Dossiers (Deuxiï¿½me Jeu)")]
     public GameObject game1Container;
     public FolderMiniGame folderGameScript;
     public float folderGameDuration = 60f;
@@ -24,8 +26,8 @@ public class GameManager : MonoBehaviour
 
     public void EndShapePhase()
     {
-        // CORRECTION ICI : On précise UnityEngine.Debug
-        UnityEngine.Debug.Log(">>> SIGNAL REÇU : Phase 1 terminée par le joueur !");
+        // CORRECTION ICI : On prï¿½cise UnityEngine.Debug
+        UnityEngine.Debug.Log(">>> SIGNAL REï¿½U : Phase 1 terminï¿½e par le joueur !");
         isShapePhaseFinished = true;
     }
 
@@ -60,8 +62,16 @@ public class GameManager : MonoBehaviour
         // --- FIN ---
         UnityEngine.Debug.Log(">>> Chef d'orchestre : Fin de la Phase 2.");
 
-        if (folderGameScript != null) folderGameScript.StopFolderGame();
+        if (folderGameScript != null)
+        {
+            folderGameScript.StopFolderGame();
+
+            //lancer scene 2..
+            transition12script.ChangementDeSol();
+        } 
     }
+
+    //animation chute / transition :
 
     public void AddPoint() { }
 }
