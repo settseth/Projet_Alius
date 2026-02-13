@@ -1,0 +1,42 @@
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Vv]isualStudioTester/
+/[Mm]emoryCaptures/
+
+# Fichiers de solution Visual Studio / Rider / VS Code
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+
+# Fichiers spécifiques au système
+.DS_Store
+Thumbs.db
+
+# Assets importés via le Package Manager (ils se retéléchargent tous seuls)
+/[Pp]ackages/*
+!/[Pp]ackages/manifest.json
+!/[Pp]ackages/packages-lock.json
+
+# --- Spécifique VR / OpenXR / HTC Vive ---
+# Souvent, les plugins comme SteamVR ou Vive Input Utility génèrent des fichiers de config locaux
+.pvr/
+/[Aa]ssets/SteamVR_Resources/
+/[Aa]ssets/SteamVR/InteractionSystem/Hints/ControlHints.txt
+
+# Si tu génères des Builds Android (pour Vive Focus par exemple)
+*.apk
+*.aab
