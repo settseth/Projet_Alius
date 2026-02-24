@@ -18,9 +18,6 @@ public class GameManager : MonoBehaviour
     public FolderMiniGame folderGameScript;
     public float folderGameDuration = 60f;
 
-    public GameObject grabBouton_Left;
-    public GameObject grabBouton_Right;
-    public Material Blue_Grab;
 
     public VideoPlayer marwanVideo;
 
@@ -49,10 +46,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator GrabInfo()
     {
-        grabBouton_Left.GetComponent<Renderer>().material = Blue_Grab;
-        grabBouton_Right.GetComponent<Renderer>().material = Blue_Grab;
         yield return new WaitForSeconds(5);
-
         StartCoroutine(GameSequence());
         
         //juste au dessus, changer par le 1er voc de mrwn qui dit "rester appuyer sur le bouton bleu pour grab un objet"
