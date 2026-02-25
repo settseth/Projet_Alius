@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(4);
 
-        // --- PHASE 0 : INTRODUCTION ---
         Debug.Log(">>> Chef d'orchestre : Lancement Phase 0 (Audio). En attente...");
         if (introAudioSource != null)
         {
@@ -68,7 +67,6 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(introAudioSource.clip.length);
         }
 
-        // --- PHASE 1 ---
         Debug.Log(">>> Chef d'orchestre : Lancement Phase 1. En attente...");
         isShapePhaseFinished = false;
         if (game2Container != null) game2Container.SetActive(true);
@@ -76,18 +74,16 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitUntil(() => isShapePhaseFinished == true);
 
-        // --- TRANSITION ---
         Debug.Log(">>> Chef d'orchestre : Transition...");
-        StartCoroutine(Transition());
+        yield return StartCoroutine(Transition());
 
-        // --- PHASE 2 ---
         Debug.Log(">>> Chef d'orchestre : Lancement Phase 2 (Dossiers).");
         if (game1Container != null) game1Container.SetActive(true);
         if (folderGameScript != null) folderGameScript.StartFolderGame();
 
         yield return new WaitForSeconds(folderGameDuration);
 
-        // --- FIN ---
+
         Debug.Log(">>> Chef d'orchestre : Fin de la Phase 2.");
         if (folderGameScript != null)
         {
@@ -103,7 +99,6 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(sonTransition);
         }
 
-        // Lecture de l'audio et de la vidéo de transition
         if (transitionAudioSource != null)
         {
             transitionAudioSource.Play();
@@ -115,8 +110,8 @@ public class GameManager : MonoBehaviour
         }
 
         float temps = 0;
-        float dureeTransition = 5f;
-        float distanceDeplacement = 0.2f;
+        float dureeTransition = 2f;
+        float distanceDeplacement = 0.4f;
 
         Vector3 posInitialeFormes = jeuFormes.transform.position;
         Vector3 posCacheeFormes = posInitialeFormes - new Vector3(0, distanceDeplacement, 0);
@@ -140,6 +135,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
+        yield return new WaitForSeconds(0.5f);
         jeuFormes.SetActive(false);
         SetPhysiqueActive(jeuDossiers, true);
         Debug.Log("Transition terminée.");

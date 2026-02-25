@@ -1280,15 +1280,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 64747220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5486227dbbeb3f41a57b5c1d2a661a9, type: 3}
+  m_Script: {fileID: 11500000, guid: b8c9a031d9e9dec4bafd8a33376a1cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transition12script: {fileID: 0}
+  introAudioSource: {fileID: 0}
+  marwanVideo: {fileID: 0}
+  jeuFormes: {fileID: 1050061431}
   game2Container: {fileID: 1050061431}
   shapeGameScript: {fileID: 1050061432}
+  jeuDossiers: {fileID: 192517282}
   game1Container: {fileID: 192517282}
   folderGameScript: {fileID: 192517283}
   folderGameDuration: 60
-  marwanVideo: {fileID: 1548978906}
+  audioSource: {fileID: 0}
+  sonTransition: {fileID: 0}
+  transitionAudioSource: {fileID: 0}
+  transitionVideoPlayer: {fileID: 0}
+  lightsManager: {fileID: 0}
 --- !u!4 &64747222
 Transform:
   m_ObjectHideFlags: 0
