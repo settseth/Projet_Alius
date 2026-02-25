@@ -859,8 +859,8 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Projet Alius V3
-  metroPackageVersion: 
+  metroPackageName: ProjetAliusV3
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -868,7 +868,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: Projet Alius V3
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: Projet Alius V3
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0

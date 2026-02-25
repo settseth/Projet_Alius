@@ -4,10 +4,10 @@ using UnityEngine.Video;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public Transition12 transition12script;
+    //[SerializeField] public Transition12 transition12script;
 
     [Header("Phase 0 : Introduction (Audio)")]
-    public AudioSource introAudioSource; 
+    //public AudioSource introAudioSource; 
 
     [Header("Phase 1 : Formes (Premier Jeu)")]
     public GameObject game2Container;
@@ -24,11 +24,11 @@ public class GameManager : MonoBehaviour
 
     private bool isShapePhaseFinished = false;
 
-    public GameObject lightsManager;
+    //public GameObject lightsManager;
 
     void Start()
     {
-        if (lightsManager != null) lightsManager.SetActive(true);
+        //if (lightsManager != null) lightsManager.SetActive(true);
         if (game2Container != null) game2Container.SetActive(false);
         if (game1Container != null) game1Container.SetActive(false);
 
@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(4);
         // --- PHASE 0 : INTRODUCTION ---
         UnityEngine.Debug.Log(">>> Chef d'orchestre : Lancement Phase 0 (Audio). En attente...");
-        if (introAudioSource != null)
+        /**if (introAudioSource != null)
         {
             UnityEngine.Debug.Log(">>> Lecture de l'audio d'introduction...");
             introAudioSource.Play();
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
             // On attend la fin précise du morceau MP3
             
             yield return new WaitForSeconds(introAudioSource.clip.length);
-        }
+        }**/
 
         // --- PHASE 1 ---
         UnityEngine.Debug.Log(">>> Chef d'orchestre : Lancement Phase 1. En attente...");
@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
             folderGameScript.StopFolderGame();
             //
             DesactivateAllWaits();
-            transition12script.ChangementDeSol();
+            //transition12script.ChangementDeSol();
         }
     }
 
