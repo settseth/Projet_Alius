@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     public AudioSource transitionAudioSource;
     public VideoPlayer transitionVideoPlayer;
 
+    [Header("Animations VR")]
+    public Animator BureauTourne; // <-- La nouvelle variable est ici
+
     public GameObject lightsManager;
 
     private bool isShapePhaseFinished = false;
@@ -88,67 +91,50 @@ public class GameManager : MonoBehaviour
         if (folderGameScript != null)
         {
             folderGameScript.StopFolderGame();
-            DesactivateAllWaits();
         }
     }
 
     IEnumerator Transition()
-    {
-        if (audioSource != null && sonTransition != null)
-        {
-            audioSource.PlayOneShot(sonTransition);
-        }
+{
+    float temps = 0f;
+    float dureeTransition = 2.0f; 
 
-        if (transitionAudioSource != null)
-        {
-            transitionAudioSource.Play();
-        }
+    if (BureauTourne != null) BureauTourne.SetBool("Tourne", true);
+    if (audioSource != null && sonTransition != null) audioSource.PlayOneShot(sonTransition);
+    if (transitionAudioSource != null) transitionAudioSource.Play();
+    if (transitionVideoPlayer != null) transitionVideoPlayer.Play();
 
-        if (transitionVideoPlayer != null)
-        {
-            transitionVideoPlayer.Play();
-        }
+    SetPhysiqueActive(jeuFormes, false);
+    SetPhysiqueActive(jeuDossiers, false);
+    
+  
+Vector3 startRotFormes = jeuFormes.transform.localEulerAngles;
+Vector3 startPosFormes = jeuFormes.transform.position; 
+Vector3 targetRotFormes = new Vector3(268.6f, startRotFormes.y, startRotFormes.z);
+Vector3 targetPosFormes = new Vector3(startPosFormes.x, startPosFormes.y - 0.150f, startPosFormes.z);
 
-        float temps = 0;
-        float dureeTransition = 2f;
-        float distanceDeplacement = 0.4f;
+while (temps < dureeTransition)
+{
+    temps += Time.deltaTime;
+    float progression = Mathf.SmoothStep(0f, 1f, temps / dureeTransition);
+    float angleXFormes = Mathf.LerpAngle(startRotFormes.x, targetRotFormes.x, progression);
+    jeuFormes.transform.localRotation = Quaternion.Euler(angleXFormes, startRotFormes.y, startRotFormes.z);
+    
+    jeuFormes.transform.position = Vector3.Lerp(startPosFormes, targetPosFormes, progression);
 
-        Vector3 posInitialeFormes = jeuFormes.transform.position;
-        Vector3 posCacheeFormes = posInitialeFormes - new Vector3(0, distanceDeplacement, 0);
+    yield return null;
+}
 
-        jeuDossiers.SetActive(true);
-        Vector3 posFinaleDossiers = jeuDossiers.transform.position;
-        Vector3 posCacheeDossiers = posFinaleDossiers - new Vector3(0, distanceDeplacement, 0);
-        jeuDossiers.transform.position = posCacheeDossiers;
+jeuFormes.transform.localRotation = Quaternion.Euler(targetRotFormes);
+jeuFormes.transform.position = targetPosFormes;
 
-        SetPhysiqueActive(jeuFormes, false);
-        SetPhysiqueActive(jeuDossiers, false);
-
-        while (temps < dureeTransition)
-        {
-            temps += Time.deltaTime;
-            float progression = Mathf.SmoothStep(0f, 1f, temps / dureeTransition);
-
-            jeuFormes.transform.position = Vector3.Lerp(posInitialeFormes, posCacheeFormes, progression);
-            jeuDossiers.transform.position = Vector3.Lerp(posCacheeDossiers, posFinaleDossiers, progression);
-
-            yield return null;
-        }
-
-        yield return new WaitForSeconds(0.5f);
-        jeuFormes.SetActive(false);
-        SetPhysiqueActive(jeuDossiers, true);
-        Debug.Log("Transition terminée.");
-    }
-
-    void DesactivateAllWaits()
-    {
-        WaitActive[] all = FindObjectsOfType<WaitActive>();
-        foreach (var sa in all)
-        {
-            sa.DesactivateWait();
-        }
-    }
+    jeuDossiers.SetActive(false);
+    jeuFormes.SetActive(false); 
+    
+    SetPhysiqueActive(jeuDossiers, true);
+    
+    Debug.Log("Transition terminée proprement.");
+}
 
     private void SetPhysiqueActive(GameObject parent, bool activer)
     {
